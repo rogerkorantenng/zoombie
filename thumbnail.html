@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zombie Battle Thumbnail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .thumbnail {
+      width: 1280px;
+      height: 720px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #2a0a0a 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Zombie silhouettes in background */
+    .zombies-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      opacity: 0.3;
+    }
+
+    .zombie-silhouette {
+      font-size: 120px;
+      color: #330000;
+      text-shadow: 0 0 50px #ff0000;
+    }
+
+    /* Red glow effect */
+    .glow-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(100, 0, 0, 0.4) 100%);
+      pointer-events: none;
+    }
+
+    /* Blood splatter effects */
+    .blood-splatter {
+      position: absolute;
+      font-size: 200px;
+      color: #8b0000;
+      opacity: 0.2;
+    }
+    .blood-1 { top: -50px; left: -50px; transform: rotate(-30deg); }
+    .blood-2 { top: 100px; right: -30px; transform: rotate(45deg); }
+    .blood-3 { bottom: 50px; left: 100px; transform: rotate(15deg); }
+
+    /* Main title */
+    .title {
+      font-size: 120px;
+      font-weight: 900;
+      color: #ff0000;
+      text-shadow:
+        0 0 20px #ff0000,
+        0 0 40px #ff0000,
+        0 0 80px #ff0000,
+        4px 4px 0 #000,
+        -2px -2px 0 #000;
+      letter-spacing: 8px;
+      z-index: 10;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 80px #ff0000, 4px 4px 0 #000; }
+      50% { text-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000, 0 0 100px #ff0000, 4px 4px 0 #000; }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 32px;
+      color: #ffcc00;
+      text-shadow: 0 0 10px #ffcc00, 2px 2px 0 #000;
+      margin-top: 20px;
+      letter-spacing: 12px;
+      z-index: 10;
+    }
+
+    /* Features */
+    .features {
+      display: flex;
+      gap: 40px;
+      margin-top: 50px;
+      z-index: 10;
+    }
+
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-icon {
+      font-size: 50px;
+    }
+
+    .feature-text {
+      font-size: 18px;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Reddit badge */
+    .reddit-badge {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 10;
+    }
+
+    .reddit-logo {
+      font-size: 50px;
+      color: #ff4500;
+    }
+
+    .reddit-text {
+      font-size: 20px;
+      color: #ff4500;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    /* Daily challenge badge */
+    .daily-badge {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      background: linear-gradient(135deg, #ffcc00, #ff8800);
+      padding: 15px 30px;
+      border-radius: 10px;
+      z-index: 10;
+      transform: rotate(5deg);
+      box-shadow: 0 5px 20px rgba(255, 136, 0, 0.5);
+    }
+
+    .daily-badge-text {
+      font-size: 22px;
+      color: #000;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Weapons showcase */
+    .weapons {
+      position: absolute;
+      bottom: 30px;
+      left: 40px;
+      display: flex;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .weapon-icon {
+      font-size: 40px;
+      opacity: 0.8;
+    }
+
+    /* Crosshair */
+    .crosshair {
+      position: absolute;
+      font-size: 80px;
+      color: rgba(255, 0, 0, 0.3);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="thumbnail">
+    <!-- Background effects -->
+    <div class="blood-splatter blood-1">💀</div>
+    <div class="blood-splatter blood-2">☠️</div>
+    <div class="blood-splatter blood-3">💀</div>
+
+    <div class="glow-overlay"></div>
+
+    <div class="crosshair">⊕</div>
+
+    <!-- Zombie silhouettes -->
+    <div class="zombies-bg">
+      <span class="zombie-silhouette">🧟</span>
+      <span class="zombie-silhouette">🧟‍♂️</span>
+      <span class="zombie-silhouette">🧟</span>
+      <span class="zombie-silhouette">🧟‍♀️</span>
+      <span class="zombie-silhouette">🧟</span>
+    </div>
+
+    <!-- Main content -->
+    <h1 class="title">ZOMBIE BATTLE</h1>
+    <p class="subtitle">SURVIVE THE HORDE</p>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature">
+        <span class="feature-icon">🔫</span>
+        <span class="feature-text">9 Weapons</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🧟</span>
+        <span class="feature-text">9 Enemy Types</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🏆</span>
+        <span class="feature-text">Leaderboards</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">⚔️</span>
+        <span class="feature-text">5 Levels</span>
+      </div>
+    </div>
+
+    <!-- Daily challenge badge -->
+    <div class="daily-badge">
+      <span class="daily-badge-text">🔥 Daily Challenges</span>
+    </div>
+
+    <!-- Reddit badge -->
+    <div class="reddit-badge">
+      <span class="reddit-text">Built for Reddit</span>
+    </div>
+
+    <!-- Weapons -->
+    <div class="weapons">
+      <span class="weapon-icon">🔫</span>
+      <span class="weapon-icon">💣</span>
+      <span class="weapon-icon">🚀</span>
+      <span class="weapon-icon">⚡</span>
+    </div>
+  </div>
+</body>
+</html>
