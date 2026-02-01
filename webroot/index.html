@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Zombie Apocalypse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Main Menu -->
+    <div id="main-menu" class="screen">
+      <h1 class="title">ZOMBIE APOCALYPSE</h1>
+      <p class="subtitle">Survive the Horde</p>
+
+      <div class="menu-buttons">
+        <button id="btn-play" class="menu-btn primary">PLAY</button>
+        <button id="btn-levels" class="menu-btn">SELECT LEVEL</button>
+        <button id="btn-leaderboard" class="menu-btn">LEADERBOARD</button>
+        <button id="btn-daily" class="menu-btn">DAILY CHALLENGE</button>
+      </div>
+
+      <div id="player-info" class="player-info">
+        <span id="username">Loading...</span>
+        <span id="high-score">High Score: 0</span>
+      </div>
+    </div>
+
+    <!-- Level Select -->
+    <div id="level-select" class="screen hidden">
+      <h2>SELECT LEVEL</h2>
+      <div id="level-list" class="level-list"></div>
+      <button id="btn-back-levels" class="menu-btn back-btn">BACK</button>
+    </div>
+
+    <!-- Leaderboard -->
+    <div id="leaderboard-screen" class="screen hidden">
+      <h2>LEADERBOARD</h2>
+      <div id="leaderboard-list" class="leaderboard-list">
+        <div class="loading">Loading...</div>
+      </div>
+      <button id="btn-back-leaderboard" class="menu-btn back-btn">BACK</button>
+    </div>
+
+    <!-- Daily Challenge -->
+    <div id="daily-screen" class="screen hidden">
+      <h2>DAILY CHALLENGE</h2>
+      <div id="challenge-info" class="challenge-info">
+        <div class="loading">Loading...</div>
+      </div>
+      <button id="btn-play-challenge" class="menu-btn primary hidden">START CHALLENGE</button>
+      <button id="btn-back-daily" class="menu-btn back-btn">BACK</button>
+    </div>
+
+    <!-- Game Canvas -->
+    <div id="game-screen" class="screen hidden">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- In-game UI overlay -->
+      <div id="game-ui" class="game-ui">
+        <button id="btn-pause" class="icon-btn">⏸️</button>
+      </div>
+
+      <!-- Notification popup -->
+      <div id="notification" class="notification hidden"></div>
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pause-menu" class="overlay hidden">
+      <div class="overlay-content">
+        <h2>PAUSED</h2>
+        <button id="btn-resume" class="menu-btn primary">RESUME</button>
+        <button id="btn-restart" class="menu-btn">RESTART</button>
+        <button id="btn-quit" class="menu-btn">QUIT TO MENU</button>
+      </div>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameover-overlay" class="overlay hidden">
+      <div class="overlay-content">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <div id="gameover-stats" class="stats">
+          <p>Score: <span id="final-score">0</span></p>
+          <p>Kills: <span id="final-kills">0</span></p>
+          <p>Level: <span id="final-level">1</span></p>
+        </div>
+        <button id="btn-retry" class="menu-btn primary">TRY AGAIN</button>
+        <button id="btn-menu" class="menu-btn">MAIN MENU</button>
+      </div>
+    </div>
+
+    <!-- Level Complete -->
+    <div id="levelcomplete-overlay" class="overlay hidden">
+      <div class="overlay-content">
+        <h2 class="success-title">LEVEL COMPLETE!</h2>
+        <div class="stats">
+          <p>Score: <span id="level-score">0</span></p>
+          <p>Bonus: <span id="level-bonus">0</span></p>
+        </div>
+        <button id="btn-nextlevel" class="menu-btn primary">NEXT LEVEL</button>
+        <button id="btn-menu-complete" class="menu-btn">MAIN MENU</button>
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="victory-overlay" class="overlay hidden">
+      <div class="overlay-content victory">
+        <h2 class="victory-title">YOU SURVIVED!</h2>
+        <p class="victory-subtitle">The zombie apocalypse is over... for now.</p>
+        <div class="stats">
+          <p>Final Score: <span id="victory-score">0</span></p>
+          <p>Total Kills: <span id="victory-kills">0</span></p>
+        </div>
+        <button id="btn-menu-victory" class="menu-btn primary">MAIN MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="sprites.js"></script>
+  <script src="collision.js"></script>
+  <script src="renderer.js"></script>
+  <script src="weapons.js"></script>
+  <script src="levels.js"></script>
+  <script src="player.js"></script>
+  <script src="zombie.js"></script>
+  <script src="game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
