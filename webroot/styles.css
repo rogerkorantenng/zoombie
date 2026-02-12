@@ -58,6 +58,13 @@ body {
   justify-content: center;
   padding: 20px;
   z-index: 1;
+  overflow-y: auto;
+}
+
+#main-menu {
+  justify-content: flex-start;
+  padding-top: 10px;
+  gap: 2px;
 }
 
 .screen.hidden {
@@ -67,7 +74,7 @@ body {
 /* Title */
 .title {
   font-family: 'Creepster', cursive;
-  font-size: 3rem;
+  font-size: 2.2rem;
   color: #ff2222;
   text-shadow:
     0 0 10px rgba(255, 0, 0, 0.8),
@@ -76,7 +83,7 @@ body {
     0 3px 0 #550000,
     0 6px 0 #330000,
     3px 6px 8px rgba(0, 0, 0, 0.8);
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   text-align: center;
   animation: titleGlow 2s ease-in-out infinite, titleShake 0.1s ease-in-out infinite;
   letter-spacing: 3px;
@@ -113,7 +120,7 @@ body {
   font-family: 'Press Start 2P', cursive;
   font-size: 0.7rem;
   color: #888;
-  margin-bottom: 25px;
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 2px;
   animation: subtitleFlicker 3s ease-in-out infinite;
@@ -598,15 +605,16 @@ h2 {
   background: linear-gradient(180deg, #1f1f1f 0%, #0a0a0a 100%);
   border: 3px solid #444;
   border-radius: 20px;
-  padding: 45px;
+  padding: 25px 20px;
   text-align: center;
-  max-width: 420px;
+  max-width: 380px;
   width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow:
     0 0 50px rgba(0, 0, 0, 0.8),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
-  overflow: hidden;
 }
 
 .overlay-content::before {
@@ -620,8 +628,8 @@ h2 {
 }
 
 .overlay-content h2 {
-  margin-bottom: 30px;
-  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
 }
 
 .gameover-title {
@@ -676,17 +684,17 @@ h2 {
 }
 
 .stats {
-  margin-bottom: 30px;
-  padding: 20px;
+  margin-bottom: 15px;
+  padding: 10px 15px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   border: 1px solid #333;
 }
 
 .stats p {
-  margin: 12px 0;
+  margin: 6px 0;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: #aaa;
 }
 
@@ -694,7 +702,7 @@ h2 {
   font-family: 'Press Start 2P', cursive;
   color: #ff4444;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.8rem;
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
 }
 
@@ -763,11 +771,11 @@ h2 {
   }
 
   .overlay-content {
-    padding: 30px 20px;
+    padding: 20px 15px;
   }
 
   .overlay-content h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   h2 {
@@ -954,4 +962,338 @@ h2 {
 .powerup-grenade {
   background: linear-gradient(180deg, #ff8800 0%, #cc5500 100%);
   border-color: #ffaa00;
+}
+
+/* ===== DAILY CHALLENGE HERO SECTION ===== */
+.daily-hero {
+  background: linear-gradient(180deg, rgba(255, 68, 0, 0.15) 0%, rgba(255, 0, 0, 0.08) 100%);
+  border: 2px solid #ff4444;
+  border-radius: 15px;
+  padding: 18px 25px;
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  margin-bottom: 12px;
+  box-shadow:
+    0 0 25px rgba(255, 68, 68, 0.2),
+    inset 0 0 20px rgba(255, 68, 68, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: heroGlow 3s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%, 100% { box-shadow: 0 0 25px rgba(255, 68, 68, 0.2), inset 0 0 20px rgba(255, 68, 68, 0.05); }
+  50% { box-shadow: 0 0 40px rgba(255, 68, 68, 0.35), inset 0 0 30px rgba(255, 68, 68, 0.1); }
+}
+
+.daily-hero-label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: #ff6644;
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.daily-hero-title {
+  font-family: 'Creepster', cursive;
+  font-size: 1.5rem;
+  color: #ff8844;
+  text-shadow: 0 0 12px rgba(255, 136, 68, 0.5);
+  margin-bottom: 4px;
+}
+
+.daily-hero-desc {
+  font-family: 'Orbitron', sans-serif;
+  color: #aaa;
+  font-size: 0.75rem;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.daily-hero-reward {
+  font-family: 'Press Start 2P', cursive;
+  color: #ffd700;
+  font-size: 0.6rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.daily-hero .menu-btn.primary {
+  padding: 10px 30px;
+  font-size: 0.8rem;
+  min-width: 180px;
+}
+
+.daily-hero-countdown {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  color: #666;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/* Menu button row for side-by-side buttons */
+.menu-btn-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.menu-btn.small {
+  padding: 10px 15px;
+  font-size: 0.7rem;
+  min-width: unset;
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+/* ===== DAILY COUNTDOWN ===== */
+.daily-countdown {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  color: #888;
+  text-align: center;
+  padding: 8px 15px;
+  margin: 10px 0;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+/* ===== DAILY LEADERBOARD SECTION ===== */
+.daily-leaderboard-section {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 15px;
+}
+
+.daily-lb-title {
+  font-family: 'Creepster', cursive;
+  font-size: 1.3rem;
+  color: #ff8844;
+  text-shadow: 0 0 10px rgba(255, 136, 68, 0.4);
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.daily-lb-list {
+  max-height: 200px;
+}
+
+.daily-lb-date {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  color: #888;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.leaderboard-entry .challenge-badge {
+  font-size: 0.7rem;
+  margin-left: 5px;
+}
+
+/* ===== SHARE BUTTON ===== */
+.share-btn {
+  background: linear-gradient(180deg, #2a5a2a 0%, #1a3a1a 100%) !important;
+  border: 2px solid #44aa44 !important;
+  color: #44ff44 !important;
+  margin-bottom: 8px;
+}
+
+.share-btn:hover {
+  background: linear-gradient(180deg, #3a6a3a 0%, #2a4a2a 100%) !important;
+  border-color: #66cc66 !important;
+  box-shadow: 0 0 15px rgba(68, 255, 68, 0.3) !important;
+}
+
+.share-btn.copied {
+  background: linear-gradient(180deg, #3a6a3a 0%, #2a5a2a 100%) !important;
+  color: #88ff88 !important;
+}
+
+/* ===== CHALLENGE COMPLETE OVERLAY ===== */
+.challenge-complete {
+  border-color: #ff8844 !important;
+  padding: 20px 15px !important;
+}
+
+.challenge-complete .menu-btn {
+  padding: 10px 20px;
+  min-width: 180px;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+}
+
+.challenge-complete .stats {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+}
+
+.challenge-complete h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.challenge-complete::before {
+  background: linear-gradient(90deg, #ff4444, #ff8844, #ffd700, #ff8844, #ff4444) !important;
+}
+
+.challenge-result-info {
+  margin-bottom: 10px;
+}
+
+.challenge-result-name {
+  font-family: 'Creepster', cursive !important;
+  font-size: 1.1rem !important;
+  color: #ff8844 !important;
+  text-shadow: 0 0 10px rgba(255, 136, 68, 0.5);
+}
+
+.challenge-result-desc {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 0.7rem !important;
+  color: #aaa !important;
+  margin-top: 3px;
+}
+
+.challenge-result-progress {
+  margin-bottom: 10px;
+}
+
+.challenge-result-count {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  color: #ccc;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.challenge-result-reward {
+  text-align: center;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  animation: rewardPulse 1s ease-in-out infinite;
+}
+
+@keyframes rewardPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+}
+
+.reward-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.challenge-failed-title {
+  font-family: 'Creepster', cursive;
+  color: #ff6644;
+  text-shadow: 0 0 20px rgba(255, 102, 68, 0.8), 0 4px 0 #553311;
+}
+
+/* ===== STREAK TOAST (slides in from right) ===== */
+.streak-toast {
+  position: fixed;
+  top: 60px;
+  right: -300px;
+  width: 220px;
+  padding: 12px 15px;
+  background: linear-gradient(180deg, rgba(40, 25, 10, 0.95) 0%, rgba(25, 15, 5, 0.95) 100%);
+  border: 2px solid #ff6600;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 100, 0, 0.4);
+  z-index: 500;
+  text-align: center;
+  transition: right 0.4s ease-out;
+  pointer-events: none;
+}
+
+.streak-toast.show {
+  right: 15px;
+}
+
+.streak-toast .streak-flames {
+  font-size: 1.1rem;
+}
+
+.streak-toast .streak-count {
+  font-family: 'Creepster', cursive;
+  font-size: 1rem;
+  color: #ff8800;
+  text-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
+  margin: 2px 0;
+}
+
+.streak-toast .streak-next {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.45rem;
+  color: #888;
+}
+
+/* ===== TUTORIAL OVERLAY ===== */
+.tutorial-content {
+  max-width: 380px;
+}
+
+.tutorial-title {
+  font-family: 'Creepster', cursive;
+  color: #ff8844 !important;
+  text-shadow: 0 0 20px rgba(255, 136, 68, 0.6), 0 4px 0 #553311 !important;
+}
+
+.tutorial-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+
+.tutorial-step {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.tutorial-key {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: #ffcc44;
+  background: rgba(255, 200, 68, 0.1);
+  border: 1px solid rgba(255, 200, 68, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: center;
+}
+
+.tutorial-desc {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  color: #ccc;
+  flex: 1;
+  text-align: right;
+}
+
+.tutorial-tip {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  color: #888;
+  text-align: center;
+  margin-bottom: 15px;
+  font-style: italic;
 }

@@ -88,6 +88,13 @@ class Game {
     // Grenades array
     this.grenades = [];
 
+    // Challenge mode
+    this.challengeMode = false;
+    this.challengeData = null;
+    this.challengeProgress = 0;
+    this.challengeWeaponKills = {};
+    this.levelStartTime = 0;
+
     // Sprite manager
     this.spritesLoaded = false;
     this.initSprites();
@@ -196,6 +203,11 @@ class Game {
     this.maxCombo = 0;
     this.comboDisplay = { text: '', color: '', alpha: 0, scale: 1 };
     this.grenades = [];
+    this.challengeMode = false;
+    this.challengeData = null;
+    this.challengeProgress = 0;
+    this.challengeWeaponKills = {};
+    this.levelStartTime = 0;
     this.sessionStats = {
       kills: 0,
       deaths: 0,
@@ -218,6 +230,14 @@ class Game {
     this.lives = 3;
     this.loadLevel(level);
     this.state = 'playing';
+    this.levelStartTime = Date.now();
+  }
+
+  setChallengeMode(challengeData) {
+    this.challengeMode = true;
+    this.challengeData = challengeData;
+    this.challengeProgress = 0;
+    this.challengeWeaponKills = {};
   }
 
   loadLevel(levelNum) {
@@ -227,16 +247,33 @@ class Game {
     this.waveTimer = 0;
     this.waitingForNextWave = false;
 
-    // Create player (positioned in the middle of the playable vertical area)
-    const playableMiddleY = this.height - 160; // Middle of expanded playable area
-    this.player = new Player(100, playableMiddleY - 60);
-    this.player.game = this;
+    // Create player or reposition existing one (preserve weapons/state across levels)
+    const playableMiddleY = this.height - 160;
+    if (this.player) {
+      // Keep existing player — preserve weapon selection, ammo, and stats
+      this.player.x = 100;
+      this.player.y = playableMiddleY - 60;
+      this.player.isDead = false;
+      this.player.health = this.player.maxHealth;
+      this.player.vx = 0;
+      this.player.vy = 0;
+      this.player.targetVx = 0;
+      this.player.targetVy = 0;
+      this.player.invincible = true;
+      this.player.invincibleTimer = 2000;
+    } else {
+      this.player = new Player(100, playableMiddleY - 60);
+      this.player.game = this;
+    }
 
     // Clear objects
     this.zombies = [];
     this.bullets = [];
     this.powerups = [];
     this.particles = [];
+
+    // Update level start time for time-based challenges
+    this.levelStartTime = Date.now();
 
     // Start first wave
     this.startWave();
@@ -604,6 +641,17 @@ class Game {
       this.sessionStats.noDamageKills++;
     }
 
+    // Track weapon-specific kills for challenge mode
+    if (this.player && this.player.currentWeapon) {
+      const weaponName = this.player.currentWeapon.name.toLowerCase();
+      this.challengeWeaponKills[weaponName] = (this.challengeWeaponKills[weaponName] || 0) + 1;
+    }
+
+    // Update challenge progress
+    if (this.challengeMode && this.challengeData) {
+      this.updateChallengeProgress();
+    }
+
     // Chance to spawn powerup
     this.spawnPowerup(zombie.x, zombie.y);
 
@@ -650,6 +698,23 @@ class Game {
     // Bonus points for completing level
     this.score += 1000 * this.currentLevel;
 
+    // Update challenge progress for level/time/nodamage types
+    if (this.challengeMode && this.challengeData) {
+      const req = this.challengeData.requirement;
+      if (req.type === 'nodamage' && this.sessionStats.damageTaken === 0) {
+        this.challengeProgress = 1;
+      }
+      if (req.type === 'level' && this.currentLevel >= req.target) {
+        this.challengeProgress = this.currentLevel;
+      }
+      if (req.type === 'time') {
+        const elapsed = Math.floor((Date.now() - this.levelStartTime) / 1000);
+        if (elapsed <= req.target) {
+          this.challengeProgress = 1;
+        }
+      }
+    }
+
     // Emit event for app.js to handle
     window.dispatchEvent(
       new CustomEvent('levelComplete', {
@@ -657,6 +722,10 @@ class Game {
           level: this.currentLevel,
           score: this.score,
           stats: this.sessionStats,
+          challengeMode: this.challengeMode,
+          challengeData: this.challengeData,
+          challengeProgress: this.getChallengeProgressForEnd(),
+          weaponKills: this.challengeWeaponKills,
         },
       })
     );
@@ -677,7 +746,14 @@ class Game {
     this.showNotification('YOU WIN!');
     window.dispatchEvent(
       new CustomEvent('gameWin', {
-        detail: { score: this.score, stats: this.sessionStats },
+        detail: {
+          score: this.score,
+          stats: this.sessionStats,
+          challengeMode: this.challengeMode,
+          challengeData: this.challengeData,
+          challengeProgress: this.getChallengeProgressForEnd(),
+          weaponKills: this.challengeWeaponKills,
+        },
       })
     );
   }
@@ -702,7 +778,15 @@ class Game {
     this.state = 'gameover';
     window.dispatchEvent(
       new CustomEvent('gameOver', {
-        detail: { score: this.score, stats: this.sessionStats, level: this.currentLevel },
+        detail: {
+          score: this.score,
+          stats: this.sessionStats,
+          level: this.currentLevel,
+          challengeMode: this.challengeMode,
+          challengeData: this.challengeData,
+          challengeProgress: this.getChallengeProgressForEnd(),
+          weaponKills: this.challengeWeaponKills,
+        },
       })
     );
   }
@@ -739,6 +823,93 @@ class Game {
       this.combo = 0;
       this.comboDisplay.alpha = 0;
     }
+  }
+
+  updateChallengeProgress() {
+    if (!this.challengeMode || !this.challengeData) return;
+
+    const req = this.challengeData.requirement;
+    let progress = 0;
+
+    switch (req.type) {
+      case 'kills':
+        progress = this.sessionStats.kills;
+        break;
+      case 'weapon':
+        progress = this.challengeWeaponKills[req.weapon] || 0;
+        break;
+      case 'melee':
+        progress = this.sessionStats.meleeKills;
+        break;
+      case 'combo':
+        progress = this.maxCombo;
+        break;
+      case 'grenade':
+        progress = this.sessionStats.grenadeKills;
+        break;
+      case 'boss_kills':
+        progress = this.sessionStats.bossKills;
+        break;
+      case 'nodamage_kills':
+        progress = this.sessionStats.noDamageKills;
+        break;
+      case 'nodamage':
+        progress = this.sessionStats.damageTaken === 0 ? 0 : 0; // evaluated at level complete
+        break;
+      case 'level':
+        progress = 0; // evaluated at level complete
+        break;
+      case 'time':
+        progress = 0; // evaluated at level complete
+        break;
+    }
+
+    const oldProgress = this.challengeProgress;
+    this.challengeProgress = progress;
+
+    if (progress !== oldProgress) {
+      window.dispatchEvent(new CustomEvent('challengeProgress', {
+        detail: {
+          progress,
+          target: req.target,
+          type: req.type,
+          completed: progress >= req.target,
+          challengeTitle: this.challengeData.title,
+        },
+      }));
+    }
+  }
+
+  getChallengeProgressForEnd() {
+    if (!this.challengeMode || !this.challengeData) return 0;
+
+    const req = this.challengeData.requirement;
+    switch (req.type) {
+      case 'kills':
+        return this.sessionStats.kills;
+      case 'weapon':
+        return this.challengeWeaponKills[req.weapon] || 0;
+      case 'melee':
+        return this.sessionStats.meleeKills;
+      case 'combo':
+        return this.maxCombo;
+      case 'grenade':
+        return this.sessionStats.grenadeKills;
+      case 'boss_kills':
+        return this.sessionStats.bossKills;
+      case 'nodamage_kills':
+        return this.sessionStats.noDamageKills;
+      case 'nodamage':
+        return this.sessionStats.damageTaken === 0 ? 1 : 0;
+      case 'level':
+        return this.currentLevel;
+      case 'time': {
+        const elapsed = Math.floor((Date.now() - this.levelStartTime) / 1000);
+        // For time challenges, progress is 1 if completed under target time, 0 otherwise
+        return elapsed <= req.target ? 1 : 0;
+      }
+    }
+    return this.challengeProgress;
   }
 
   getComboMultiplier() {
@@ -954,6 +1125,11 @@ class Game {
 
       // Render HUD (not affected by camera)
       this.renderHUD();
+
+      // Render challenge HUD if in challenge mode
+      if (this.challengeMode && this.challengeData) {
+        this.renderChallengeHUD();
+      }
 
       if (this.state === 'paused') {
         this.renderPauseScreen();
@@ -1612,6 +1788,60 @@ class Game {
     ctx.fillStyle = '#ff4444';
     ctx.font = '14px Arial';
     ctx.fillText(`Kills: ${this.sessionStats.kills}`, this.width - 100, 24);
+  }
+
+  renderChallengeHUD() {
+    const ctx = this.ctx;
+    const req = this.challengeData.requirement;
+    const progress = this.challengeProgress;
+    const target = req.target;
+    const percent = Math.min(100, (progress / target) * 100);
+    const completed = progress >= target;
+
+    const barWidth = 220;
+    const barHeight = 16;
+    const x = this.width / 2 - barWidth / 2;
+    const y = 8;
+
+    // Background panel
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(x - 10, y - 4, barWidth + 20, 42);
+    ctx.strokeStyle = completed ? '#44ff44' : '#ff6600';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x - 10, y - 4, barWidth + 20, 42);
+
+    // Challenge title
+    ctx.fillStyle = completed ? '#44ff44' : '#ff8844';
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(this.challengeData.title, this.width / 2, y + 8);
+
+    // Progress bar background
+    ctx.fillStyle = '#222';
+    ctx.fillRect(x, y + 14, barWidth, barHeight);
+
+    // Progress bar fill
+    const gradient = ctx.createLinearGradient(x, 0, x + barWidth * percent / 100, 0);
+    if (completed) {
+      gradient.addColorStop(0, '#44ff44');
+      gradient.addColorStop(1, '#22cc22');
+    } else {
+      gradient.addColorStop(0, '#ff4444');
+      gradient.addColorStop(1, '#ff8844');
+    }
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y + 14, barWidth * percent / 100, barHeight);
+
+    // Progress bar border
+    ctx.strokeStyle = '#555';
+    ctx.strokeRect(x, y + 14, barWidth, barHeight);
+
+    // Progress text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px Arial';
+    ctx.fillText(`${progress} / ${target}`, this.width / 2, y + 26);
+
+    ctx.textAlign = 'left';
   }
 
   renderWeaponSlots() {

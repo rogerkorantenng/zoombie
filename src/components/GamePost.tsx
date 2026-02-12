@@ -9,7 +9,7 @@ import {
   unlockAchievement,
   checkAchievements,
 } from '../handlers/gameState.js';
-import { getLeaderboard, submitScore } from '../handlers/leaderboard.js';
+import { getLeaderboard, submitScore, submitDailyScore, getDailyLeaderboard } from '../handlers/leaderboard.js';
 import {
   getTodaysChallenge,
   getChallengeProgress,
@@ -150,6 +150,30 @@ export function GamePost({ context }: GamePostProps) {
         context.ui.webView.postMessage('game-webview', {
           type: 'STREAK_INFO',
           data: JSON.parse(JSON.stringify(streakInfo)),
+        });
+        break;
+      }
+
+      case 'SUBMIT_DAILY_SCORE': {
+        const user = await context.reddit.getCurrentUser();
+        const username = user?.username ?? 'Anonymous';
+        await submitDailyScore(
+          context,
+          odometerId,
+          username,
+          msg.data.score,
+          msg.data.kills,
+          msg.data.challengeCompleted
+        );
+        context.ui.webView.postMessage('game-webview', { type: 'SAVE_SUCCESS' });
+        break;
+      }
+
+      case 'GET_DAILY_LEADERBOARD': {
+        const dailyLeaderboard = await getDailyLeaderboard(context, 10);
+        context.ui.webView.postMessage('game-webview', {
+          type: 'DAILY_LEADERBOARD_DATA',
+          data: JSON.parse(JSON.stringify(dailyLeaderboard)),
         });
         break;
       }

@@ -13,11 +13,26 @@
       <h1 class="title">ZOMBIE APOCALYPSE</h1>
       <p class="subtitle">Survive the Horde</p>
 
+      <!-- Streak Toast (slides in from right) -->
+      <div id="streak-display-menu" class="streak-toast"></div>
+
+      <!-- Daily Challenge Hero Section -->
+      <div id="daily-hero" class="daily-hero">
+        <div class="daily-hero-label">TODAY'S CHALLENGE</div>
+        <div id="daily-hero-title" class="daily-hero-title">Loading...</div>
+        <div id="daily-hero-desc" class="daily-hero-desc"></div>
+        <div id="daily-hero-reward" class="daily-hero-reward"></div>
+        <button id="btn-daily-hero" class="menu-btn primary">START CHALLENGE</button>
+        <div id="daily-hero-countdown" class="daily-hero-countdown"></div>
+      </div>
+
       <div class="menu-buttons">
-        <button id="btn-play" class="menu-btn primary">PLAY</button>
+        <button id="btn-play" class="menu-btn">FREE PLAY</button>
         <button id="btn-levels" class="menu-btn">SELECT LEVEL</button>
-        <button id="btn-leaderboard" class="menu-btn">LEADERBOARD</button>
-        <button id="btn-daily" class="menu-btn">DAILY CHALLENGE</button>
+        <div class="menu-btn-row">
+          <button id="btn-leaderboard" class="menu-btn small">LEADERBOARD</button>
+          <button id="btn-daily-leaderboard" class="menu-btn small">DAILY BOARD</button>
+        </div>
       </div>
 
       <div id="player-info" class="player-info">
@@ -49,7 +64,24 @@
         <div class="loading">Loading...</div>
       </div>
       <button id="btn-play-challenge" class="menu-btn primary hidden">START CHALLENGE</button>
+      <div id="daily-countdown" class="daily-countdown"></div>
+      <div id="daily-leaderboard-section" class="daily-leaderboard-section">
+        <h3 class="daily-lb-title">TODAY'S TOP SCORES</h3>
+        <div id="daily-leaderboard-list" class="leaderboard-list daily-lb-list">
+          <div class="loading">Loading...</div>
+        </div>
+      </div>
       <button id="btn-back-daily" class="menu-btn back-btn">BACK</button>
+    </div>
+
+    <!-- Daily Leaderboard Screen -->
+    <div id="daily-leaderboard-screen" class="screen hidden">
+      <h2>DAILY LEADERBOARD</h2>
+      <div id="daily-lb-date" class="daily-lb-date"></div>
+      <div id="daily-leaderboard-full" class="leaderboard-list">
+        <div class="loading">Loading...</div>
+      </div>
+      <button id="btn-back-daily-lb" class="menu-btn back-btn">BACK</button>
     </div>
 
     <!-- Game Canvas -->
@@ -84,6 +116,7 @@
           <p>Kills: <span id="final-kills">0</span></p>
           <p>Level: <span id="final-level">1</span></p>
         </div>
+        <button id="btn-share-gameover" class="menu-btn share-btn hidden">SHARE RESULTS</button>
         <button id="btn-retry" class="menu-btn primary">TRY AGAIN</button>
         <button id="btn-menu" class="menu-btn">MAIN MENU</button>
       </div>
@@ -111,7 +144,71 @@
           <p>Final Score: <span id="victory-score">0</span></p>
           <p>Total Kills: <span id="victory-kills">0</span></p>
         </div>
+        <button id="btn-share-victory" class="menu-btn share-btn hidden">SHARE RESULTS</button>
         <button id="btn-menu-victory" class="menu-btn primary">MAIN MENU</button>
+      </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="overlay hidden">
+      <div class="overlay-content tutorial-content">
+        <h2 class="tutorial-title">HOW TO PLAY</h2>
+        <div class="tutorial-steps">
+          <div class="tutorial-step">
+            <span class="tutorial-key">WASD / Arrows</span>
+            <span class="tutorial-desc">Move around</span>
+          </div>
+          <div class="tutorial-step">
+            <span class="tutorial-key">Space / Click</span>
+            <span class="tutorial-desc">Shoot</span>
+          </div>
+          <div class="tutorial-step">
+            <span class="tutorial-key">X / Right Click</span>
+            <span class="tutorial-desc">Melee attack</span>
+          </div>
+          <div class="tutorial-step">
+            <span class="tutorial-key">G / Q</span>
+            <span class="tutorial-desc">Throw grenade</span>
+          </div>
+          <div class="tutorial-step">
+            <span class="tutorial-key">Shift</span>
+            <span class="tutorial-desc">Dodge roll</span>
+          </div>
+          <div class="tutorial-step">
+            <span class="tutorial-key">1-9</span>
+            <span class="tutorial-desc">Switch weapons</span>
+          </div>
+        </div>
+        <p class="tutorial-tip">Kill zombies, survive waves, complete the challenge!</p>
+        <button id="btn-tutorial-start" class="menu-btn primary">GOT IT - LET'S GO!</button>
+      </div>
+    </div>
+
+    <!-- Challenge Complete Overlay -->
+    <div id="challenge-complete-overlay" class="overlay hidden">
+      <div class="overlay-content challenge-complete">
+        <h2 id="challenge-result-title" class="success-title">CHALLENGE COMPLETE!</h2>
+        <div id="challenge-result-info" class="challenge-result-info">
+          <p id="challenge-result-name" class="challenge-result-name"></p>
+          <p id="challenge-result-desc" class="challenge-result-desc"></p>
+        </div>
+        <div class="challenge-result-progress">
+          <div class="challenge-progress">
+            <div id="challenge-result-bar" class="challenge-progress-bar" style="width: 0%"></div>
+          </div>
+          <p id="challenge-result-count" class="challenge-result-count"></p>
+        </div>
+        <div id="challenge-result-stats" class="stats">
+          <p>Score: <span id="challenge-result-score">0</span></p>
+          <p>Kills: <span id="challenge-result-kills">0</span></p>
+          <p>Max Combo: <span id="challenge-result-combo">0</span></p>
+        </div>
+        <div id="challenge-result-reward" class="challenge-result-reward hidden">
+          <span class="reward-text">+<span id="challenge-reward-points">0</span> points</span>
+        </div>
+        <button id="btn-share-challenge" class="menu-btn share-btn">SHARE RESULTS</button>
+        <button id="btn-retry-challenge" class="menu-btn primary">PLAY AGAIN</button>
+        <button id="btn-menu-challenge" class="menu-btn">MAIN MENU</button>
       </div>
     </div>
   </div>

@@ -137,11 +137,22 @@ export type WebViewMessage =
   | { type: 'GET_PLAYER_DATA' }
   | { type: 'UNLOCK_ACHIEVEMENT'; data: { achievementId: string } }
   | { type: 'UPDATE_STREAK' }
-  | { type: 'GET_STREAK_INFO' };
+  | { type: 'GET_STREAK_INFO' }
+  | { type: 'SUBMIT_DAILY_SCORE'; data: { score: number; kills: number; challengeCompleted: boolean } }
+  | { type: 'GET_DAILY_LEADERBOARD' };
+
+export interface DailyLeaderboardEntry {
+  username: string;
+  score: number;
+  kills: number;
+  challengeCompleted: boolean;
+  timestamp: number;
+}
 
 export type DevvitMessage =
   | { type: 'INIT_RESPONSE'; data: { username: string; progress: GameProgress; stats: PlayerStats; streakInfo?: StreakInfo } }
   | { type: 'LEADERBOARD_DATA'; data: LeaderboardEntry[] }
+  | { type: 'DAILY_LEADERBOARD_DATA'; data: DailyLeaderboardEntry[] }
   | { type: 'DAILY_CHALLENGE_DATA'; data: { challenge: DailyChallenge; progress: ChallengeProgress | null } }
   | { type: 'ACHIEVEMENT_UNLOCKED'; data: { achievement: Achievement } }
   | { type: 'STREAK_INFO'; data: StreakInfo }
